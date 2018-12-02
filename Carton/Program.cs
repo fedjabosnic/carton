@@ -7,6 +7,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Runtime.CompilerServices;
+
+[assembly:InternalsVisibleTo("Carton.Test")]
 
 namespace Carton
 {
