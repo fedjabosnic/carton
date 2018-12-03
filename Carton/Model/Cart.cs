@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Carton.Model
@@ -22,5 +23,10 @@ namespace Carton.Model
         /// The date and time when the cart was last updated
         /// </summary>
         public DateTime Updated { get; set; }
+
+        /// <summary>
+        /// The items in the cart
+        /// </summary>
+        public List<Item> Items { get; set; }
     }
 }

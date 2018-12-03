@@ -9,40 +9,33 @@ using Carton.Model;
 namespace Carton.Test.Controllers.V1.CartsController
 {
     [TestClass]
-    public class a_get_request
+    public class cart_delete
     {
         [TestMethod]
-        public void returns_status_code_200_and_the_correct_cart_when_the_cart_exists()
+        public void returns_status_code_200_when_the_cart_was_successfully_deleted()
         {
             var store = new Mock<ICartStore>();
 
-            store.Setup(x => x.Get("abc")).Returns(new Cart { CartId = "abc", Created = DateTime.MaxValue, Updated = DateTime.MaxValue });
+            store.Setup(x => x.Delete("abc"));
 
             var controller = new Carton.Controllers.V1.CartsController(store.Object);
 
-            var response = controller.Get("abc").Result as ObjectResult;
+            var response = controller.Delete("abc") as OkResult;
 
             response.Should().NotBe(null);
             response.StatusCode.Should().Be(200);
-
-            response.Value.Should().NotBe(null);
-            response.Value.Should().BeOfType<Cart>();
-
-            response.Value.As<Cart>().CartId.Should().Be("abc");
-            response.Value.As<Cart>().Created.Should().Be(DateTime.MaxValue);
-            response.Value.As<Cart>().Updated.Should().Be(DateTime.MaxValue);
         }
 
         [TestMethod]
-        public void returns_status_code_404_when_the_cart_does_not_exist()
+        public void returns_status_code_404_when_the_cart_doesnt_exist()
         {
             var store = new Mock<ICartStore>();
 
-            store.Setup(x => x.Get(It.IsAny<string>())).Throws<CartNotFoundException>();
+            store.Setup(x => x.Delete("abc")).Throws<CartNotFoundException>();
 
             var controller = new Carton.Controllers.V1.CartsController(store.Object);
 
-            var response = controller.Get("abc").Result as StatusCodeResult;
+            var response = controller.Delete("abc") as StatusCodeResult;
 
             response.Should().NotBe(null);
             response.StatusCode.Should().Be(404);
@@ -53,11 +46,11 @@ namespace Carton.Test.Controllers.V1.CartsController
         {
             var store = new Mock<ICartStore>();
 
-            store.Setup(x => x.Get(It.IsAny<string>())).Throws<Exception>();
+            store.Setup(x => x.Delete("abc")).Throws<Exception>();
 
             var controller = new Carton.Controllers.V1.CartsController(store.Object);
 
-            var response = controller.Get("abc").Result as StatusCodeResult;
+            var response = controller.Delete("abc") as StatusCodeResult;
 
             response.Should().NotBe(null);
             response.StatusCode.Should().Be(500);

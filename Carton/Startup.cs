@@ -1,35 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Carton.Storage;
+using Carton.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Carton
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add middleware
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Carton API", Version = "v1", Description = "A sample API to demo Swashbuckle" });
+                // Enable the swagger documentation endpoints
+                c.SwaggerDoc("v1", new Info { Title = "Carton API", Version = "v1", Description = "Carton's RESTful web api" });
+                // Enable the swagger documentation xml comment parser
                 c.IncludeXmlComments(System.IO.Path.Combine(System.AppContext.BaseDirectory, "Carton.xml"));
             });
+
+            // Bind dependencies
+            services.AddTransient<ITime, Time>();
+            services.AddSingleton<ICartStore, InMemoryCartStore>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

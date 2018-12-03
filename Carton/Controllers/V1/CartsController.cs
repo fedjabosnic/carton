@@ -20,14 +20,12 @@ namespace Carton.Controllers.V1
         }
 
         /// <summary>
-        /// Creates a new cart.
+        /// Creates a new cart
         /// </summary>
-        /// <response code="201">Cart was created</response>
-        /// <response code="500">There was an error processing the request</response>
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(Cart))]
         [ProducesResponseType(500, Type = typeof(void))]
-        public ActionResult<Cart> Post()
+        public ActionResult<Cart> Create()
         {
             try
             {
@@ -35,62 +33,128 @@ namespace Carton.Controllers.V1
 
                 return Created($"/api/v1/carts/{cart.CartId}", cart);
             }
-            catch (Exception)
-            {
-                return StatusCode(500);
-            }
+            catch (Exception) { return StatusCode(500); }
         }
 
         /// <summary>
         /// Retrieves a cart
         /// </summary>
-        /// <response code="200">Cart was found</response>
-        /// <response code="404">The requested cart does not exist</response>
-        /// <response code="500">There was an error processing the request</response>
-        [HttpGet("{id}")]
+        [HttpGet("{cartId}")]
         [ProducesResponseType(200, Type = typeof(Cart))]
         [ProducesResponseType(404, Type = typeof(void))]
         [ProducesResponseType(500, Type = typeof(void))]
-        public ActionResult<Cart> Get(string id)
+        public ActionResult<Cart> Get(string cartId)
         {
             try
             {
-                var cart = store.Get(id);
+                var cart = store.Get(cartId);
 
                 return Ok(cart);
             }
-            catch (CartNotFoundException)
-            {
-                return StatusCode(404);
-            }
-            catch (Exception)
-            {
-                return StatusCode(500);
-            }
+            catch (CartNotFoundException) { return StatusCode(404); }
+            catch (Exception) { return StatusCode(500); }
         }
 
         /// <summary>
-        /// Updates the cart.
+        /// Deletes a cart
         /// </summary>
-        /// <response code="200">Cart updated</response>
-        [HttpPut("{id}")]
-        [ProducesResponseType(200, Type = typeof(Cart))]
-        [ProducesResponseType(500, Type = typeof(void))]
-        public ActionResult<Cart> Put(string id, [FromBody] Cart value)
-        {
-            return StatusCode(500);
-        }
-
-        /// <summary>
-        /// Deletes a cart.
-        /// </summary>
-        /// <response code="200">Cart deleted</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("{cartId}")]
         [ProducesResponseType(200, Type = typeof(void))]
+        [ProducesResponseType(404, Type = typeof(void))]
         [ProducesResponseType(500, Type = typeof(void))]
-        public ActionResult Delete(string id)
+        public ActionResult Delete(string cartId)
         {
-            return StatusCode(500);
+            try
+            {
+                store.Delete(cartId);
+
+                return Ok();
+            }
+            catch (CartNotFoundException) { return StatusCode(404); }
+            catch (Exception) { return StatusCode(500); }
+        }
+
+        /// <summary>
+        /// Clears all items from a cart
+        /// </summary>
+        [HttpDelete("{cartId}/items")]
+        [ProducesResponseType(200, Type = typeof(Item))]
+        [ProducesResponseType(404, Type = typeof(void))]
+        [ProducesResponseType(500, Type = typeof(void))]
+        public ActionResult<Cart> Clear(string cartId)
+        {
+            try
+            {
+                var cart = store.Clear(cartId);
+
+                return Ok(cart);
+            }
+            catch (CartNotFoundException) { return StatusCode(404); }
+            catch (Exception) { return StatusCode(500); }
+        }
+
+        /// <summary>
+        /// Adds an item to a cart
+        /// </summary>
+        [HttpPost("{cartId}/items")]
+        [ProducesResponseType(201, Type = typeof(Item))]
+        [ProducesResponseType(404, Type = typeof(void))]
+        [ProducesResponseType(500, Type = typeof(void))]
+        public ActionResult<Item> AddItem(string cartId, [FromBody] Item item)
+        {
+            try
+            {
+                item = store.AddItem(cartId, item.Product, item.Quantity);
+
+                return Created($"/api/v1/carts/{cartId}/items/{item.ItemId}", item);
+            }
+            catch (QuantityNotValidException) { return StatusCode(400); }
+            catch (ProductNotValidException) { return StatusCode(400); }
+            catch (CartNotFoundException) { return StatusCode(404); }
+            catch (Exception) { return StatusCode(500); }
+        }
+
+        /// <summary>
+        /// Updates an item in a cart
+        /// </summary>
+        [HttpPut("{cartId}/items/{itemId}")]
+        [ProducesResponseType(200, Type = typeof(Item))]
+        [ProducesResponseType(400, Type = typeof(void))]
+        [ProducesResponseType(404, Type = typeof(void))]
+        [ProducesResponseType(500, Type = typeof(void))]
+        public ActionResult<Item> UpdateItem(string cartId, string itemId, [FromBody] Item item)
+        {
+            try
+            {
+                item = store.UpdateItem(cartId, itemId, item.Product, item.Quantity);
+
+                return Ok(item);
+            }
+            catch (QuantityNotValidException) { return StatusCode(400); }
+            catch (ProductNotValidException) { return StatusCode(400); }
+            catch (CartNotFoundException) { return StatusCode(404); }
+            catch (ItemNotFoundException) { return StatusCode(404); }
+            catch (Exception) { return StatusCode(500); }
+        }
+
+        /// <summary>
+        /// Removes an item from a cart
+        /// </summary>
+        [HttpDelete("{cartId}/items/{itemId}")]
+        [ProducesResponseType(201, Type = typeof(void))]
+        [ProducesResponseType(404, Type = typeof(void))]
+        [ProducesResponseType(500, Type = typeof(void))]
+        public ActionResult<Item> RemoveItem(string cartId, string itemId)
+        {
+            try
+            {
+                store.RemoveItem(cartId, itemId);
+
+                return Ok();
+            }
+            catch (CartNotFoundException) { return StatusCode(404); }
+            catch (ItemNotFoundException) { return StatusCode(404); }
+            catch (Exception) { return StatusCode(500); }
         }
     }
 }
