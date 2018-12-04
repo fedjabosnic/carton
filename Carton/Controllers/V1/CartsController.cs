@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Carton.Storage;
 using Carton.Model;
+using Carton.Model.Exceptions;
 
 namespace Carton.Controllers.V1
 {
@@ -108,8 +109,7 @@ namespace Carton.Controllers.V1
 
                 return Created($"/api/v1/carts/{cartId}/items/{item.ItemId}", item);
             }
-            catch (QuantityNotValidException) { return StatusCode(400); }
-            catch (ProductNotValidException) { return StatusCode(400); }
+            catch (ValidationException) { return StatusCode(400); }
             catch (CartNotFoundException) { return StatusCode(404); }
             catch (Exception) { return StatusCode(500); }
         }
@@ -130,8 +130,7 @@ namespace Carton.Controllers.V1
 
                 return Ok(item);
             }
-            catch (QuantityNotValidException) { return StatusCode(400); }
-            catch (ProductNotValidException) { return StatusCode(400); }
+            catch (ValidationException) { return StatusCode(400); }
             catch (CartNotFoundException) { return StatusCode(404); }
             catch (ItemNotFoundException) { return StatusCode(404); }
             catch (Exception) { return StatusCode(500); }
@@ -144,7 +143,7 @@ namespace Carton.Controllers.V1
         [ProducesResponseType(201, Type = typeof(void))]
         [ProducesResponseType(404, Type = typeof(void))]
         [ProducesResponseType(500, Type = typeof(void))]
-        public ActionResult<Item> RemoveItem(string cartId, string itemId)
+        public ActionResult RemoveItem(string cartId, string itemId)
         {
             try
             {

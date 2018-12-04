@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Carton.Model;
+using Carton.Model.Exceptions;
 using Carton.Storage;
 using Carton.Utilities;
 
 namespace Carton.Storage
 {
+    /// <summary>
+    /// A simple in memory implementation of a cart store
+    /// </summary>
+    /// <remarks>
+    /// Concurrency is dealt with using simple exclusive lock semantics
+    /// </remarks>
     internal class InMemoryCartStore : ICartStore
     {
         private readonly ITime time;
@@ -122,12 +129,12 @@ namespace Carton.Storage
 
         private void AssertProductIsValid(string product)
         {
-            if (string.IsNullOrEmpty(product)) throw new ProductNotValidException();
+            if (string.IsNullOrEmpty(product)) throw new ValidationException();
         }
 
         private void AssertQuantityIsValid(int quantity)
         {
-            if (quantity < 1) throw new QuantityNotValidException();
+            if (quantity < 1) throw new ValidationException();
         }
     }
 }

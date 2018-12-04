@@ -1,25 +1,40 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
 using Moq;
 using Carton.Storage;
-using Microsoft.AspNetCore.Mvc;
 using Carton.Model;
-using System.Collections.Generic;
+using Carton.Model.Exceptions;
 
 namespace Carton.Test.Controllers.V1.CartsController
 {
     [TestClass]
-    public class cart_create
+    public class creating_a_cart
     {
+        private Mock<ICartStore> store;
+        private Carton.Controllers.V1.CartsController controller;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            store = new Mock<ICartStore>();
+            controller = new Carton.Controllers.V1.CartsController(store.Object);
+        }
+
         [TestMethod]
         public void returns_status_code_201_and_the_cart_when_the_cart_was_created_successfully()
         {
-            var store = new Mock<ICartStore>();
-
-            store.Setup(x => x.Create()).Returns(new Cart { CartId = "abc", Created = DateTime.MaxValue, Updated = DateTime.MaxValue, Items = new List<Item>() });
-
-            var controller = new Carton.Controllers.V1.CartsController(store.Object);
+            store
+                .Setup(x => x.Create())
+                .Returns(new Cart
+                    {
+                        CartId = "abc",
+                        Created = DateTime.MaxValue,
+                        Updated = DateTime.MaxValue,
+                        Items = new List<Item>()
+                    });
 
             var response = controller.Create().Result as CreatedResult;
 
@@ -39,11 +54,7 @@ namespace Carton.Test.Controllers.V1.CartsController
         [TestMethod]
         public void returns_status_code_500_when_the_cart_store_throws_an_exception()
         {
-            var store = new Mock<ICartStore>();
-
             store.Setup(x => x.Create()).Throws<Exception>();
-
-            var controller = new Carton.Controllers.V1.CartsController(store.Object);
 
             var response = controller.Create().Result as StatusCodeResult;
 

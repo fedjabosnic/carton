@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Carton.Model;
 
-namespace Carton.Storage
+namespace Carton.Model.Exceptions
 {
     [Serializable]
     internal class ItemNotFoundException : Exception

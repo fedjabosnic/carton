@@ -1,25 +1,40 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
 using Moq;
 using Carton.Storage;
-using Microsoft.AspNetCore.Mvc;
 using Carton.Model;
-using System.Collections.Generic;
+using Carton.Model.Exceptions;
 
 namespace Carton.Test.Controllers.V1.CartsController
 {
     [TestClass]
-    public class cart_clear
+    public class clearing_a_cart
     {
+        private Mock<ICartStore> store;
+        private Carton.Controllers.V1.CartsController controller;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            store = new Mock<ICartStore>();
+            controller = new Carton.Controllers.V1.CartsController(store.Object);
+        }
+
         [TestMethod]
         public void returns_status_code_200_when_the_cart_was_successfully_cleared()
         {
-            var store = new Mock<ICartStore>();
-
-            store.Setup(x => x.Clear("abc")).Returns(new Cart { CartId = "abc", Created = DateTime.MaxValue, Updated = DateTime.MaxValue, Items = new List<Item>() });
-
-            var controller = new Carton.Controllers.V1.CartsController(store.Object);
+            store
+                .Setup(x => x.Clear("abc"))
+                .Returns(new Cart
+                    {
+                        CartId = "abc",
+                        Created = DateTime.MaxValue,
+                        Updated = DateTime.MaxValue,
+                        Items = new List<Item>()
+                    });
 
             var response = controller.Clear("abc").Result as ObjectResult;
 
@@ -39,11 +54,7 @@ namespace Carton.Test.Controllers.V1.CartsController
         [TestMethod]
         public void returns_status_code_404_when_the_cart_doesnt_exist()
         {
-            var store = new Mock<ICartStore>();
-
             store.Setup(x => x.Clear("abc")).Throws<CartNotFoundException>();
-
-            var controller = new Carton.Controllers.V1.CartsController(store.Object);
 
             var response = controller.Clear("abc").Result as StatusCodeResult;
 
@@ -54,11 +65,7 @@ namespace Carton.Test.Controllers.V1.CartsController
         [TestMethod]
         public void returns_status_code_500_when_the_cart_store_throws_an_exception()
         {
-            var store = new Mock<ICartStore>();
-
             store.Setup(x => x.Clear("abc")).Throws<Exception>();
-
-            var controller = new Carton.Controllers.V1.CartsController(store.Object);
 
             var response = controller.Clear("abc").Result as StatusCodeResult;
 
