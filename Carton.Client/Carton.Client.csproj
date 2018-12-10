@@ -4,6 +4,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Product>Carton.Client</Product>
+    <Version>0.1.0</Version>
+    <Authors>Fedja Bosnic</Authors>
+    <Description>Carton client api</Description>
+    <PackageTags>carton client api</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/fedjabosnic/carton</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/fedjabosnic/carton</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1"/>
   </ItemGroup>
