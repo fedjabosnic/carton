@@ -4,23 +4,23 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
 using Moq;
-using Carton.Storage;
-using Carton.Model;
-using Carton.Model.Exceptions;
+using Carton.Service.Storage;
+using Carton.Service.Model;
+using Carton.Service.Model.Exceptions;
 
-namespace Carton.Test.Controllers.V1.CartsController
+namespace Carton.Service.Test.Controllers.V1.CartsController
 {
     [TestClass]
     public class adding_an_item_to_a_cart
     {
         private Mock<ICartStore> store;
-        private Carton.Controllers.V1.CartsController controller;
+        private Carton.Service.Controllers.V1.CartsController controller;
 
         [TestInitialize]
         public void Setup()
         {
             store = new Mock<ICartStore>();
-            controller = new Carton.Controllers.V1.CartsController(store.Object);
+            controller = new Carton.Service.Controllers.V1.CartsController(store.Object);
         }
 
         [TestMethod]

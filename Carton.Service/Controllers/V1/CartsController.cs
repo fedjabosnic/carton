@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Carton.Storage;
-using Carton.Model;
-using Carton.Model.Exceptions;
+using Carton.Service.Storage;
+using Carton.Service.Model;
+using Carton.Service.Model.Exceptions;
 
-namespace Carton.Controllers.V1
+namespace Carton.Service.Controllers.V1
 {
     /// <summary>
     /// Restful api for managing carts and items

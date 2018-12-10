@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Carton.Model
+namespace Carton.Service.Model
 {
     /// <summary>
     /// Represents a cart

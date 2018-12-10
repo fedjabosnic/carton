@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carton", "Carton\Carton.csproj", "{B774C90D-9094-4F75-93DF-006417740350}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carton.Service", "Carton.Service\Carton.Service.csproj", "{B774C90D-9094-4F75-93DF-006417740350}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carton.Test", "Carton.Test\Carton.Test.csproj", "{249E34FD-7A5F-4814-9484-E104641B8CE4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carton.Service.Test", "Carton.Service.Test\Carton.Service.Test.csproj", "{249E34FD-7A5F-4814-9484-E104641B8CE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carton.Client", "Carton.Client\Carton.Client.csproj", "{19BC3CBD-B8B3-44C7-9A05-681325814ABC}"
 EndProject

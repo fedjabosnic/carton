@@ -1,6 +1,6 @@
 using System;
 
-namespace Carton.Utilities
+namespace Carton.Service.Utilities
 {
     internal class Time : ITime
     {

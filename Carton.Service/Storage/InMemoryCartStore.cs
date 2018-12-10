@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Carton.Model;
-using Carton.Model.Exceptions;
-using Carton.Storage;
-using Carton.Utilities;
+using Carton.Service.Model;
+using Carton.Service.Model.Exceptions;
+using Carton.Service.Storage;
+using Carton.Service.Utilities;
 
-namespace Carton.Storage
+namespace Carton.Service.Storage
 {
     /// <summary>
     /// A simple in memory implementation of a cart store

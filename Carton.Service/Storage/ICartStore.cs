@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Carton.Model;
+using Carton.Service.Model;
 
-namespace Carton.Storage
+namespace Carton.Service.Storage
 {
     /// <summary>
     /// Represents storage for carts

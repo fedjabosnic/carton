@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Carton.Model;
+using Carton.Service.Model;
 
-namespace Carton.Model.Exceptions
+namespace Carton.Service.Model.Exceptions
 {
     [Serializable]
     internal class ValidationException : Exception

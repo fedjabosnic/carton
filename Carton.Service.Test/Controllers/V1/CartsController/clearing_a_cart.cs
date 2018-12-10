@@ -4,30 +4,30 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
 using Moq;
-using Carton.Storage;
-using Carton.Model;
-using Carton.Model.Exceptions;
+using Carton.Service.Storage;
+using Carton.Service.Model;
+using Carton.Service.Model.Exceptions;
 
-namespace Carton.Test.Controllers.V1.CartsController
+namespace Carton.Service.Test.Controllers.V1.CartsController
 {
     [TestClass]
-    public class creating_a_cart
+    public class clearing_a_cart
     {
         private Mock<ICartStore> store;
-        private Carton.Controllers.V1.CartsController controller;
+        private Carton.Service.Controllers.V1.CartsController controller;
 
         [TestInitialize]
         public void Setup()
         {
             store = new Mock<ICartStore>();
-            controller = new Carton.Controllers.V1.CartsController(store.Object);
+            controller = new Carton.Service.Controllers.V1.CartsController(store.Object);
         }
 
         [TestMethod]
-        public void returns_status_code_201_and_the_cart_when_the_cart_was_created_successfully()
+        public void returns_status_code_200_when_the_cart_was_successfully_cleared()
         {
             store
-                .Setup(x => x.Create())
+                .Setup(x => x.Clear("abc"))
                 .Returns(new Cart
                     {
                         CartId = "abc",
@@ -36,11 +36,10 @@ namespace Carton.Test.Controllers.V1.CartsController
                         Items = new List<Item>()
                     });
 
-            var response = controller.Create().Result as CreatedResult;
+            var response = controller.Clear("abc").Result as ObjectResult;
 
             response.Should().NotBe(null);
-            response.Location.Should().Be("/api/v1/carts/abc");
-            response.StatusCode.Should().Be(201);
+            response.StatusCode.Should().Be(200);
 
             response.Value.Should().NotBe(null);
             response.Value.Should().BeOfType<Cart>();
@@ -49,14 +48,26 @@ namespace Carton.Test.Controllers.V1.CartsController
             response.Value.As<Cart>().CartId.Should().Be("abc");
             response.Value.As<Cart>().Created.Should().Be(DateTime.MaxValue);
             response.Value.As<Cart>().Updated.Should().Be(DateTime.MaxValue);
+            response.Value.As<Cart>().Items.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void returns_status_code_404_when_the_cart_doesnt_exist()
+        {
+            store.Setup(x => x.Clear("abc")).Throws<CartNotFoundException>();
+
+            var response = controller.Clear("abc").Result as StatusCodeResult;
+
+            response.Should().NotBe(null);
+            response.StatusCode.Should().Be(404);
         }
 
         [TestMethod]
         public void returns_status_code_500_when_the_cart_store_throws_an_exception()
         {
-            store.Setup(x => x.Create()).Throws<Exception>();
+            store.Setup(x => x.Clear("abc")).Throws<Exception>();
 
-            var response = controller.Create().Result as StatusCodeResult;
+            var response = controller.Clear("abc").Result as StatusCodeResult;
 
             response.Should().NotBe(null);
             response.StatusCode.Should().Be(500);

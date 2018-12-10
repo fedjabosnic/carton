@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Carton\Carton.csproj" />
+    <ProjectReference Include="..\Carton.Service\Carton.Service.csproj" />
   </ItemGroup>
 
 </Project>

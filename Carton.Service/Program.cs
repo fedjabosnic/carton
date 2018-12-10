@@ -9,9 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("Carton.Test")]
+[assembly:InternalsVisibleTo("Carton.Service.Test")]
 
-namespace Carton
+namespace Carton.Service
 {
     public class Program
     {

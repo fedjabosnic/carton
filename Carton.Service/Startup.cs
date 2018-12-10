@@ -1,6 +1,6 @@
 ﻿using System;
-using Carton.Storage;
-using Carton.Utilities;
+using Carton.Service.Storage;
+using Carton.Service.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace Carton
+namespace Carton.Service
 {
     public class Startup
     {
